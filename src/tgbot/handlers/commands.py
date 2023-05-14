@@ -19,10 +19,6 @@ from tgbot.config import BOT_LOGO
 from tgbot.misc.filters import IsAdmin
 
 
-# Create router
-cmd_router = Router(name="cmd_router")
-
-
 async def start_cmd_from_admin(message: Message) -> None:
     """This handler receive messages with `/start` command from bot admins"""
     await message.answer(text="👋 Hello, admin!")
@@ -46,7 +42,8 @@ async def help_cmd(message: Message) -> None:
     await message.answer_photo(photo=FSInputFile(path=BOT_LOGO), caption=caption)
 
 
-# Register routers
+# Create and register router
+cmd_router = Router(name="cmd_router")
 cmd_router.message.register(start_cmd_from_admin, *(Command(commands=["start"]), IsAdmin()))
 cmd_router.message.register(start_cmd_from_user, Command(commands=["start"]))
 cmd_router.message.register(help_cmd, Command(commands=["help"]))

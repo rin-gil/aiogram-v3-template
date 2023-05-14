@@ -13,14 +13,11 @@ from aiogram import F, Router
 from aiogram.types import Message
 
 
-# Create router
-msg_router = Router(name="msg_router")
-
-
 async def echo(message: Message) -> None:
     """Responds to echoing messages"""
     await message.reply(text=f"<pre>{message.text}</pre>")
 
 
-# Register routers
+# Create and register router
+msg_router = Router(name="msg_router")
 msg_router.message.register(echo, F.text)

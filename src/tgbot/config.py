@@ -62,6 +62,3 @@ class BotConfig:
         except (EnvError, ValueError) as exc:
             logger.warning("ADMINS ids not found: %s", repr(exc))
             return None
-
-
-bot_config = BotConfig(path_to_env_file=ENV_FILE)

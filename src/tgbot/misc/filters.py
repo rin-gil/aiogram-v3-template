@@ -18,12 +18,12 @@ Example:
 from aiogram.filters import BaseFilter
 from aiogram.types import CallbackQuery, Message
 
-from tgbot.config import bot_config
+from tgbot.config import BotConfig
 
 
 class IsAdmin(BaseFilter):
     """The filter allows you to determine if the sender of the message is a bot administrator"""
 
-    async def __call__(self, obj: CallbackQuery | Message) -> bool:
+    async def __call__(self, obj: CallbackQuery | Message, config: BotConfig) -> bool:
         """Returns True if the sender of the message or callback query is a bot administrator"""
-        return obj.from_user.id in bot_config.admin_ids
+        return obj.from_user.id in config.admin_ids

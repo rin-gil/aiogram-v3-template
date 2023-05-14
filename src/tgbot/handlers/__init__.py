@@ -19,6 +19,7 @@ Constants:
 from aiogram import Router
 
 from tgbot.handlers.commands import cmd_router
+from tgbot.handlers.errors import error_router
 from tgbot.handlers.messages import msg_router
 
 
@@ -26,4 +27,5 @@ from tgbot.handlers.messages import msg_router
 ROUTERS: tuple[Router, ...] = (
     cmd_router,
     msg_router,
+    error_router,
 )
