@@ -14,10 +14,17 @@ DEBUG: bool = True
 
 # Path settings
 _BASE_DIR: Path = Path(__file__).resolve().parent.parent
-BOT_LOGO: str = path.normpath(path.join(_BASE_DIR, "tgbot/assets/img/bot_logo.jpg"))
 ENV_FILE: str = path.normpath(path.join(_BASE_DIR, ".env"))
 LOG_FILE: str = path.normpath(path.join(_BASE_DIR, "tgbot.log"))
 
+# According to Telegram documentation https://core.telegram.org/bots/api#sendphoto
+# when sending identical files (e.g. bot logo), it is recommended not to specify path to file
+# via FSInputFile(path_to_file) for methods answer_photo(), reply_photo(),
+# but upload file to telegram servers and specify ID of already uploaded file.
+# To get the identifier, you can send a file with an image to bot https://t.me/RawDataBot
+# which in response will send the dictionary, where you need to copy the value by the 'file_id' key
+BOT_LOGO_FILE_ID: str | None = "AgACAgIAAxkDAAIX9mRhAWt3RXSQKeeLYboYkLUypCjpAAJ3yTEbLwABCUtvlJhpL7_X3wEAAwIAA3gAAy8E"
+BOT_LOGO: str = path.normpath(path.join(_BASE_DIR, "tgbot/assets/img/bot_logo.jpg"))
 
 # Disables full traceback of errors in the log file
 if not DEBUG:
@@ -30,7 +37,7 @@ logging.basicConfig(
     encoding="utf-8",
     format=f"[%(asctime)s] %(levelname)-8s {'%(filename)s:%(lineno)d - ' if DEBUG else ''}%(name)s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
-    level=logging.INFO,
+    level=logging.INFO if DEBUG else logging.WARNING,
 )
 
 

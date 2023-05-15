@@ -5,32 +5,25 @@ Contains:
     start_cmd_from_admin    - response to the '/start' command from the bot administrators
     start_cmd_from_user     - response to the '/start' command from the bot users
     help_cmd                - response to the '/help' command
-
-Note:
-    Routers are imported into the __init__.py package handlers,
-    where a tuple of ROUTERS is assembled for further registration in the dispatcher
 """
 
-from aiogram import Router
-from aiogram.filters import Command
 from aiogram.types import FSInputFile, Message
 
-from tgbot.config import BOT_LOGO
-from tgbot.misc.filters import IsAdmin
+from tgbot.config import BOT_LOGO, BOT_LOGO_FILE_ID
 
 
-async def start_cmd_from_admin(message: Message) -> None:
+async def start_cmd_from_admin(message: Message) -> Message:
     """This handler receive messages with `/start` command from bot admins"""
-    await message.answer(text="👋 Hello, admin!")
+    return await message.answer(text="👋 Hello, admin!")
 
 
-async def start_cmd_from_user(message: Message) -> None:
+async def start_cmd_from_user(message: Message) -> Message:
     """This handler receive messages with `/start` command from bot users"""
     username: str = message.from_user.first_name
-    await message.answer(text=f"👋 Hello, {username if username else 'user'}!")
+    return await message.answer(text=f"👋 Hello, {username if username else 'user'}!")
 
 
-async def help_cmd(message: Message) -> None:
+async def help_cmd(message: Message) -> Message:
     """This handler receive messages with `/help` command"""
     caption: str = (
         "This is a template for a telegram bot written in Python using the "
@@ -39,11 +32,5 @@ async def help_cmd(message: Message) -> None:
         "The source code of the template is"
         " available in the repository on <b><a href='https://github.com/rin-gil/aiogram_v3_template'>GitHub</a></b>"
     )
-    await message.answer_photo(photo=FSInputFile(path=BOT_LOGO), caption=caption)
-
-
-# Create and register router
-cmd_router = Router(name="cmd_router")
-cmd_router.message.register(start_cmd_from_admin, *(Command(commands=["start"]), IsAdmin()))
-cmd_router.message.register(start_cmd_from_user, Command(commands=["start"]))
-cmd_router.message.register(help_cmd, Command(commands=["help"]))
+    photo: str | FSInputFile = BOT_LOGO_FILE_ID if BOT_LOGO_FILE_ID else FSInputFile(path=BOT_LOGO)
+    return await message.answer_photo(photo=photo, caption=caption)

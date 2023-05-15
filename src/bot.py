@@ -6,8 +6,8 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 
 from tgbot.config import BotConfig, ENV_FILE, logger
+from tgbot.handlers import register_user_handlers
 
-from tgbot.handlers import ROUTERS
 from tgbot.misc.bot_commands import set_default_commands
 from tgbot.services.broadcaster import broadcast
 
@@ -28,7 +28,7 @@ async def start_bot() -> None:
     config: BotConfig = BotConfig(path_to_env_file=ENV_FILE)
     bot: Bot = Bot(token=config.token, parse_mode="HTML")
     dp: Dispatcher = Dispatcher(storage=MemoryStorage())
-    dp.include_routers(*ROUTERS)
+    register_user_handlers(router=dp)
     dp.startup.register(callback=on_startup)
     dp.shutdown.register(callback=on_shutdown)
     await bot.delete_webhook(drop_pending_updates=True)

@@ -5,7 +5,6 @@ Writes an error message into the log, as well as the text of the message or call
 during the processing of which an error occurred
 """
 
-from aiogram import Router
 from aiogram.types import CallbackQuery, ErrorEvent, Message
 
 from tgbot.config import logger
@@ -21,8 +20,3 @@ async def error_handler(event: ErrorEvent) -> bool:
         msg_or_call_from_user = ""
     logger.error("Exception while handling an update: %s%s", event.exception, msg_or_call_from_user)
     return True
-
-
-# Create and register router
-error_router: Router = Router(name="error_router")
-error_router.errors.register(error_handler)
