@@ -7,8 +7,9 @@ from aiogram import Bot, Dispatcher
 from aiogram.methods import SendPhoto, SendMessage
 from aiogram.types import Chat, User
 
-from src.tgbot.config import BOT_LOGO_FILE_ID, BotConfig, ENV_FILE  # pylint: disable=import-error
-from tests.utils.fake_data import get_message, get_update  # pylint: disable=import-error
+from utils.fake_data import get_message, get_update  # pylint: disable=import-error
+
+from tgbot.config import BOT_LOGO_FILE_ID, BotConfig, ENV_FILE
 
 
 @pytest.mark.asyncio

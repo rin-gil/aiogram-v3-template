@@ -7,8 +7,9 @@ import pytest
 import pytest_asyncio
 from aiogram import Dispatcher, Bot
 
-from src.tgbot.handlers import register_user_handlers  # pylint: disable=import-error
-from tests.utils.fake_data import MockedBot  # pylint: disable=import-error
+from utils.fake_data import MockedBot
+
+from tgbot.handlers import register_user_handlers
 
 
 @pytest_asyncio.fixture()
