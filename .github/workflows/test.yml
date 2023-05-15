@@ -29,3 +29,10 @@ jobs:
       - name: Test with Mypy
         run: |
           mypy .
+      - name: Test with Pytest
+        run: |
+          cd src
+          mv .env.example ../.env
+          mv * ../
+          cd ..
+          python -m pytest --rootdir=tests
