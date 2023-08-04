@@ -9,7 +9,7 @@ Contains:
 
 from aiogram.types import FSInputFile, Message
 
-from tgbot.config import BOT_LOGO, BOT_LOGO_FILE_ID
+from tgbot.config import BotConfig
 
 
 async def start_cmd_from_admin(message: Message) -> Message:
@@ -23,14 +23,13 @@ async def start_cmd_from_user(message: Message) -> Message:
     return await message.answer(text=f"👋 Hello, {username if username else 'user'}!")
 
 
-async def help_cmd(message: Message) -> Message:
+async def help_cmd(message: Message, config: BotConfig) -> Message:
     """This handler receive messages with `/help` command"""
     caption: str = (
         "This is a template for a telegram bot written in Python using the "
         "<b><a href='https://github.com/aiogram/aiogram'>aiogram</a></b> framework"
         "\n\n"
         "The source code of the template is"
-        " available in the repository on <b><a href='https://github.com/rin-gil/aiogram_v3_template'>GitHub</a></b>"
+        " available in the repository on <b><a href='https://github.com/rin-gil/aiogram-v3-template'>GitHub</a></b>"
     )
-    photo: str | FSInputFile = BOT_LOGO_FILE_ID if BOT_LOGO_FILE_ID else FSInputFile(path=BOT_LOGO)
-    return await message.answer_photo(photo=photo, caption=caption)
+    return await message.answer_photo(photo=FSInputFile(path=config.paths.logo_path), caption=caption)

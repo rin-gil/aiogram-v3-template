@@ -4,8 +4,11 @@ from asyncio import run
 
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
+from aiohttp.web import run_app
+from aiohttp.web_app import Application
 
-from tgbot.config import BotConfig, ENV_FILE, logger
+from tgbot.config import BotConfig, logger
 from tgbot.handlers import register_user_handlers
 
 from tgbot.misc.bot_commands import set_default_commands
@@ -23,22 +26,33 @@ async def on_shutdown(bot: Bot, config: BotConfig) -> None:
     await broadcast(bot=bot, users=config.admin_ids, msg="Bot was stopped", disable_notification=True)
 
 
-async def start_bot() -> None:
-    """Launches the bot"""
-    config: BotConfig = BotConfig(path_to_env_file=ENV_FILE)
+def start_bot() -> None:
+    """Runs the bot"""
+    config: BotConfig = BotConfig()
     bot: Bot = Bot(token=config.token, parse_mode="HTML")
     dp: Dispatcher = Dispatcher(storage=MemoryStorage())
     register_user_handlers(router=dp)
     dp.startup.register(callback=on_startup)
     dp.shutdown.register(callback=on_shutdown)
-    await bot.delete_webhook(drop_pending_updates=True)
-    await dp.start_polling(bot, config=config)
+
+    if config.webhook:
+        dp["webhook_url"] = f"{config.webhook.wh_host}/{config.webhook.wh_path}"
+        app = Application()
+        SimpleRequestHandler(
+            dispatcher=dp, bot=bot, secret_token=config.webhook.wh_token, config=config
+        ).register(app, path=f"/{config.webhook.wh_path}")
+        setup_application(app, dp, bot=bot, config=config)
+
+        run_app(app, host=config.webhook.app_host, port=config.webhook.app_port)
+
+    else:
+        run(dp.start_polling(bot, config=config))
 
 
 if __name__ == "__main__":
     try:
         logger.info("Starting bot")
-        run(start_bot())
+        start_bot()
     except (KeyboardInterrupt, SystemExit):
         pass
     except Exception as exc:
