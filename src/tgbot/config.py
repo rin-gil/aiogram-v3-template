@@ -31,6 +31,9 @@ DEBUG: bool = True
 # Change USE_WEBHOOK to True to use a webhook instead of long polling
 USE_WEBHOOK: bool = False
 
+# Change USE_REDIS to True to use redis storage for FSM instead of memory
+USE_REDIS: bool = False
+
 # Path settings
 _BASE_DIR: Path = Path(__file__).resolve().parent.parent
 
@@ -84,16 +87,34 @@ class BotConfig:
             return None
 
     @property
+    def redis_dsn(self) -> str | None:
+        """Returns the url of the Redis database connection"""
+        try:
+            redis_host: str = self._env.str("REDIS_HOST")
+            redis_port: str = self._env.str("REDIS_PORT")
+            redis_db_index: str = self._env.str("REDIS_DB_INDEX")
+            redis_db_pass: str = self._env.str("REDIS_DB_PASS")
+            return f"redis://:{redis_db_pass}@{redis_host}:{redis_port}/{redis_db_index}" if USE_REDIS else None
+
+        except EnvError as exc:
+            logger.critical("Redis credentials not found in the .env file: %s", repr(exc))
+            sys.exit(repr(exc))
+
+    @property
     def webhook(self) -> WebhookCredentials | None:
         """Returns the credentials to use webhook"""
         try:
-            return WebhookCredentials(
-                wh_host=self._env.str("WEBHOOK_HOST"),
-                wh_path=self._env.str("WEBHOOK_PATH"),
-                wh_token=self._env.str("WEBHOOK_TOKEN"),
-                app_host=self._env.str("APP_HOST"),
-                app_port=self._env.int("APP_PORT"),
-            ) if USE_WEBHOOK else None
+            return (
+                WebhookCredentials(
+                    wh_host=self._env.str("WEBHOOK_HOST"),
+                    wh_path=self._env.str("WEBHOOK_PATH"),
+                    wh_token=self._env.str("WEBHOOK_TOKEN"),
+                    app_host=self._env.str("APP_HOST"),
+                    app_port=self._env.int("APP_PORT"),
+                )
+                if USE_WEBHOOK
+                else None
+            )
         except EnvError as exc:
             logger.critical("Webhook credentials not found in the .env file: %s", repr(exc))
             sys.exit(repr(exc))

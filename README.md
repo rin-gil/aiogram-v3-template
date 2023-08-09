@@ -10,6 +10,9 @@
     <a href="https://pypi.org/project/environs/9.5.0/">
         <img src="https://img.shields.io/badge/environs-v9.5.0-informational" alt="environs version">
     </a>
+    <a href="https://pypi.org/project/redis/4.6.0/">
+        <img src="https://img.shields.io/badge/redis-v4.6.0-informational" alt="redis version">
+    </a>
     <a href="https://github.com/psf/black">
         <img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-black.svg">
     </a>
