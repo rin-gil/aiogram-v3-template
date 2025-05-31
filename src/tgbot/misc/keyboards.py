@@ -1,19 +1,17 @@
-"""
-In this module you can store the keyboards used in the bot
+"""This module implements the keyboards used in the bot."""
 
-Example:
-    Import the keyboard and keys:
-        from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from tgbot.misc.tmpl_render import TmplRender
 
-    Creating a keyboard with three buttons:
-        test_kb: InlineKeyboardMarkup = InlineKeyboardMarkup(
-            inline_keyboard=[
-                [InlineKeyboardButton(text="First button", callback_data="data_from_first_button")],
-                [InlineKeyboardButton(text="Second button", callback_data="data_from_second_button")],
-                [InlineKeyboardButton(text="Third button", callback_data="data_from_third_button")],
-            ]
-        )
+__all__: tuple[str] = ("KeyboardManager",)
 
-    Attach the keyboard to the message:
-        await message.answer(text="Some message",reply_markup=test_kb)
-"""
+
+class KeyboardManager:
+    """Implements creation of bot keyboards."""
+
+    def __init__(self, tmpl: TmplRender) -> None:
+        """
+        Initialize the keyboard manager.
+
+        :param tmpl: TmplRender object.
+        """
+        self._tmpl: TmplRender = tmpl
