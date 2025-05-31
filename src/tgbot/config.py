@@ -18,7 +18,7 @@ __all__: tuple[str, ...] = ("Config", "logger")
 
 _DEBUG: bool = True  # Change DEBUG to False when running on a production server
 _USE_WEBHOOK: bool = False  # Change USE_WEBHOOK to True to use a webhook instead of long polling
-_USE_REDIS: bool = True  # Change USE_REDIS to True to use redis storage for FSM instead of memory
+_USE_REDIS: bool = False  # Change USE_REDIS to True to use redis storage for FSM instead of memory
 _USE_REDIS_SOCKET: bool = False  # Change to True to use a redis socket
 _BASE_DIR: Path = Path(__file__).resolve().parent  # Path settings
 
