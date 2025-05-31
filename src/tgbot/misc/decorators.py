@@ -33,7 +33,7 @@ def handle_telegram_exc(func: Callable) -> Callable:
         try:
             return await func(*args, **kwargs)
         except TelegramForbiddenError as exc:
-            logger.error(f"Target [ID:{kwargs.get("user_id")}]: failed with error {exc}")
+            logger.error(f"Target [ID:{kwargs.get('user_id')}]: failed with error {exc}")
         except TelegramBadRequest as exc:
             logger.error(f"Target [ID:{kwargs.get('user_id')}]: failed with error {exc}")
         except TelegramRetryAfter as exc:
