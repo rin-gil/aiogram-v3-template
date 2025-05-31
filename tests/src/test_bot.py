@@ -37,7 +37,7 @@ def mock_loop() -> AbstractEventLoop:
 @pytest.fixture
 def tg_bot() -> TgBot:
     """
-    Provide a fresh TgBot instance for each test with mocked dependencies, defaulting to MemoryStorage.
+    Provide a fresh TgBot instance for each test with mocked dependencies, using RedisStorage.
 
     :return: TgBot instance.
     """
@@ -45,7 +45,7 @@ def tg_bot() -> TgBot:
         target="bot.Bot", return_value=MagicMock(spec=Bot)
     ) as mock_bot:
         mock_config.return_value.token = "mock_token"
-        mock_config.return_value.redis = None  # Redis disabled by default
+        mock_config.return_value.redis = MagicMock()  # Enable Redis to use RedisStorage
         mock_config.return_value.admins = [123, 456]
         mock_config.return_value.paths = MagicMock()
         mock_config.return_value.webhook = None

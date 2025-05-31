@@ -5,6 +5,7 @@ from asyncio import run
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
+from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.storage.redis import DefaultKeyBuilder, RedisStorage
 from aiogram.webhook.aiohttp_server import setup_application, SimpleRequestHandler
 from aiohttp.web import run_app
@@ -33,8 +34,10 @@ class TgBot:
                 parse_mode=ParseMode.HTML, allow_sending_without_reply=True, link_preview_is_disabled=True
             ),
         )
-        storage: RedisStorage = RedisStorage(
-            redis=self._config.redis, key_builder=DefaultKeyBuilder(prefix="tgbot_fsm")
+        storage: MemoryStorage | RedisStorage = (
+            RedisStorage(redis=self._config.redis, key_builder=DefaultKeyBuilder(prefix="tgbot_fsm"))
+            if self._config.redis
+            else MemoryStorage()
         )
         self._dp: Dispatcher = Dispatcher(storage=storage)
         self._broadcaster: Broadcaster = Broadcaster(bot=self._bot)
