@@ -23,6 +23,7 @@ _USE_REDIS_SOCKET: bool = False  # Change to True to use a redis socket
 _BASE_DIR: Path = Path(__file__).resolve().parent  # Path settings
 
 
+# region Logging
 class Logging:
     """Performs logging settings in the application."""
 
@@ -59,6 +60,10 @@ class Logging:
 logger: Logger = Logging().logger
 
 
+# endregion
+
+
+# region Config
 class Config:
     """Reads variables from the .env file."""
 
@@ -225,3 +230,6 @@ class Config:
         :return: WebhookCredentials or None.
         """
         return self._webhook
+
+
+# endregion
