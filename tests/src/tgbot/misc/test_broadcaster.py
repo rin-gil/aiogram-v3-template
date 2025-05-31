@@ -1,4 +1,4 @@
-"""Unit tests for src/tgbot/services/broadcaster.py"""
+"""Unit tests for src/tgbot/misc/broadcaster.py"""
 
 # pylint: disable=redefined-outer-name
 
@@ -12,7 +12,7 @@ from aiogram.exceptions import TelegramAPIError
 from aiogram.methods.send_message import SendMessage
 from aiogram.types import Chat, InlineKeyboardMarkup, InlineKeyboardButton, Message
 
-from tgbot.services.broadcaster import Broadcaster
+from tgbot.misc.broadcaster import Broadcaster
 
 __all__: tuple = ()
 
