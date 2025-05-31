@@ -1,4 +1,4 @@
-name: Tests
+name: Pylint
 
 on:
   push:
@@ -27,6 +27,3 @@ jobs:
       - name: Lint with Pylint
         run: |
           pylint --recursive=y .
-      - name: Test with Mypy
-        run: |
-          mypy .

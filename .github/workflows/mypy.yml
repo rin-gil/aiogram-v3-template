@@ -1,4 +1,4 @@
-name: Tests
+name: Mypy
 
 on:
   push:
@@ -24,9 +24,6 @@ jobs:
           cd src
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
           if [ -f requirements-dev.txt ]; then pip install -r requirements-dev.txt; fi
-      - name: Lint with Pylint
-        run: |
-          pylint --recursive=y .
       - name: Test with Mypy
         run: |
           mypy .
