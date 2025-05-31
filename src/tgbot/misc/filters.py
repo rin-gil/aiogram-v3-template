@@ -1,29 +1,28 @@
-"""
-The module contains various filters that can be used in handlers
-
-Example:
-    Import the filter into the module with handlers:
-        from tgbot.misc.filters import IsAdmin
-
-    Create a router and add a filter to it:
-        admin_router = Router()
-        admin_router.message.filter(IsAdmin())
-
-    Let's register the right handler with the decorator:
-        @admin_router.message(CommandStart())
-        async def admin_start(message: Message):
-            await message.reply("Hello, admin!")
-"""
+"""The module contains various filters that can be used in handlers."""
 
 from aiogram.filters import BaseFilter
 from aiogram.types import CallbackQuery, Message
 
-from tgbot.config import BotConfig
+__all__: tuple[str, ...] = ("IsAdmin",)
 
 
 class IsAdmin(BaseFilter):
-    """The filter allows you to determine if the sender of the message is a bot administrator"""
+    """The filter allows you to determine if the sender of the message is a bot admin."""
 
-    async def __call__(self, obj: CallbackQuery | Message, config: BotConfig) -> bool:
-        """Returns True if the sender of the message or callback query is a bot administrator"""
-        return obj.from_user.id in config.admin_ids
+    def __init__(self, admins_ids: list[int]) -> None:
+        """
+        Initialize the filter.
+
+        :param admins_ids: List of Bot admin IDs.
+        """
+        super().__init__()
+        self.admins_ids: list[int] = admins_ids
+
+    async def __call__(self, obj: CallbackQuery | Message) -> bool:
+        """
+        Returns True if the sender of the message or callback query is a bot administrator.
+
+        :param obj: CallbackQuery | Message object.
+        :return: True if the sender of the message or callback query is a bot administrator.
+        """
+        return obj.from_user.id in self.admins_ids
