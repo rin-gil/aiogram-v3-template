@@ -1,4 +1,4 @@
-"""Unit tests for src/tgbot/misc/broadcaster.py"""
+"""Unit tests for src/tgbot/services/broadcaster.py"""
 
 # pylint: disable=redefined-outer-name
 
